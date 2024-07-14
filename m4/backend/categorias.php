@@ -1,6 +1,6 @@
 <?php
 include '../class/autoload.php';
-$database = new Database("miproyecto2", "127.0.0.1", "root", "");
+$database = new Database("miproyecto2", "localhost", "root", "");
 
 $nombre = $_POST['nombre'];
 

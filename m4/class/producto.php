@@ -7,6 +7,7 @@ class Producto {
   private $descripcion;
   private $precio;
   private $categoria_id;
+  private $imagen;
   private $conn;
 
   public function __construct($conn) {
@@ -53,10 +54,19 @@ class Producto {
       return $this->categoria_id;
   }
 
+  public function setImagen($imagen) {
+      $this->imagen = $imagen;
+  }
+
+  public function getImagen() {
+      return $this->imagen;
+  }
+
   public function insert() {
-      $sql = "INSERT INTO productos (nombre, descripcion, precio, categoria_id) VALUES (:nombre, :descripcion, :precio, :categoria_id)";
+      $sql = "INSERT INTO productos (nombre, imagen, descripcion, precio, categoria_id) VALUES (:nombre, :imagen, :descripcion, :precio, :categoria_id)";
       $stmt = $this->conn->prepare($sql);
       $stmt->bindParam(':nombre', $this->nombre);
+      $stmt->bindParam(':imagen', $this->imagen);
       $stmt->bindParam(':descripcion', $this->descripcion);
       $stmt->bindParam(':precio', $this->precio);
       $stmt->bindParam(':categoria_id', $this->categoria_id);
@@ -87,5 +97,14 @@ class Producto {
       $stmt = $this->conn->prepare($sql);
       $stmt->bindParam(':id', $id);
       return $stmt->execute();
+  }
+
+  public function getAll() {
+    $sql = "SELECT productos.*, categorias.nombre as nombre_categoria 
+            FROM productos 
+            left join categorias on productos.categoria_id = categorias.id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }
